@@ -8,12 +8,12 @@ class Jeu():
     def jouer_coup(self, rep):
         self.partie.jouer_coup(rep)
 
-    def creer_partie(self):
-        self.partie = Partie()
+    def creer_partie(self,largeur, hauteur):
+        self.partie = Partie(largeur, hauteur)
 
 class Partie():
-    def __init__(self):
-        self.airdejeu = AiredeJeu(12, 6)
+    def __init__(self, largeur,hauteur):
+        self.airdejeu = AiredeJeu(largeur,hauteur)
         self.docteur = Docteur(random.randrange(self.airdejeu.largeur), random.randrange(self.airdejeu.hauteur), self)
         self.daleks = []
         self.niveau = 0
@@ -129,26 +129,15 @@ class Controlleur():
         rep = self.vue.afficher_menu_ini()
         rep2 = self.option_partie()
         rep3 = self.difficulte_partie()
-        rep4 = self.dimension_partie_x()
-        rep5 = self.dimension_partie_y()
+
         if rep == "1":
-            self.modele.creer_partie()
+            largeur = int(input("Largeur de l'aire de jeu: "))
+            hauteur = int(input("hauteur de l'aire de jeu: "))
+            
+            #INITIALISE DIMENSION JEU
+            self.modele.creer_partie(largeur,hauteur)
             self.partie_en_cours = True
-            if rep2 == "1":
-                self.modele.creer_partie()
-                self.partie_en_cours = True
-                if rep3 == "1":
-                    self.modele.creer_partie()
-                    self.partie_en_cours = True
-                    self.jouer_partie()
-                    if self.partie_en_cours == False:
-                        print("GAME OVER")
-            if rep2 == "2":
-                self.modele.creer_partie()
-                self.partie_en_cours = True
-                self.jouer_partie()
-        if rep == "2":
-            self.partie_en_cours = False
+            self.jouer_partie()
 
 
     def option_partie(self):
@@ -172,19 +161,8 @@ class Controlleur():
         rep = input("votre choix: ")
         return rep
 
-    def dimension_partie_x (self):
-        print("\n\n\n\n\n\n\n\n========================================================")
-        print("                      Dalek Game                        ")
-        print("========================================================")
-        print("La hauteur de votre partie")
-        rep = input("votre choix: ")
-        return rep
-
-    def dimension_partie_y(self):
-        print("\nLa largeur de votre partie")
-        rep = input("votre choix: ")
-
     def jouer_partie(self):
+        
         while self.partie_en_cours:
             print('\n')
             print("========================================================")
