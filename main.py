@@ -1,5 +1,5 @@
 import random
-# TEST UN DEUD TRI
+# TEST UN DEUD TRois, quate
 class Jeu():
     def __init__(self):
         self.partie = None
@@ -22,7 +22,8 @@ class Partie():
 
     def jouer_coup(self,rep):
         if self.docteur.changer_position(rep):
-            pass
+            for i in self.daleks:
+                i.jouerCoup(self.docteur)
         return True
 
     def creer_niveau(self):
@@ -67,7 +68,7 @@ class Dalek():
         self.x = x
         self.y = y
 
-    def deplacer(self, docteur):
+    def jouerCoup(self, docteur):
         doc_x = docteur.x
         doc_y = docteur.y
 
@@ -191,7 +192,7 @@ class Controlleur():
             self.modele.jouer_coup(rep)
 
 
-        rep_coup = self.modele.jouer_coup(rep)
+        
 
 
 if __name__ == "__main__":
