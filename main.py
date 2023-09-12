@@ -1,5 +1,5 @@
 import random
-
+# TEST UN DEUD TRI
 class Jeu():
     def __init__(self):
         self.partie = None
