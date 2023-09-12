@@ -19,6 +19,7 @@ class Partie():
         self.niveau = 0
         self.dalek_par_niveau = 5
         self.creer_niveau()
+        self.teleporteur = 0
 
     def jouer_coup(self,rep):
         if self.docteur.changer_position(rep):
@@ -55,7 +56,6 @@ class Docteur():
         self.partie = partie
 
     def changer_position(self, pos_relative):
-        """ tester les limite avant """
         rel_x, rel_y = pos_relative
         if self.x + rel_x < 0 or self.y + rel_y < 0 or self.x + rel_x > (self.partie.airdejeu.largeur - 1) or self.y + rel_y > (self.partie.airdejeu.hauteur - 1):
             return False
@@ -141,6 +141,8 @@ class Controlleur():
                     self.modele.creer_partie()
                     self.partie_en_cours = True
                     self.jouer_partie()
+                    if self.partie_en_cours == False:
+                        print("GAME OVER")
             if rep2 == "2":
                 self.modele.creer_partie()
                 self.partie_en_cours = True
