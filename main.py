@@ -8,17 +8,18 @@ class Jeu():
     def jouer_coup(self, rep):
         self.partie.jouer_coup(rep)
 
-    def creer_partie(self,largeur, hauteur):
-        self.partie = Partie(largeur, hauteur)
+    def creer_partie(self,largeur, hauteur, rep3):
+        self.partie = Partie(largeur, hauteur, rep3)
 
 class Partie():
-    def __init__(self, largeur,hauteur):
+    def __init__(self, largeur,hauteur, rep3 = None):
         self.airdejeu = AiredeJeu(largeur,hauteur)
         self.docteur = Docteur(random.randrange(self.airdejeu.largeur), random.randrange(self.airdejeu.hauteur), self)
         self.daleks = []
         self.niveau = 0
-        self.dalek_par_niveau = 5
-        self.creer_niveau()
+        self.dalek_par_niveau = 0
+        if rep3 is not None:
+            self.creer_niveau(rep3)
         self.teleporteur = 0
 
     def jouer_coup(self,rep):
@@ -27,8 +28,16 @@ class Partie():
                 i.jouerCoup(self.docteur)
         return True
 
-    def creer_niveau(self):
+    def creer_niveau(self, rep):
         self.niveau += 1
+
+        if rep == "1":
+            self.dalek_par_niveau = 5
+        elif rep == "2":
+            self.dalek_par_niveau = 10
+        elif rep == "3":
+            self.dalek_par_niveau = 15
+
         nb_daleks = self.niveau * self.dalek_par_niveau
         for i in range(nb_daleks):
             while True:
@@ -128,14 +137,13 @@ class Controlleur():
         self.vue = Vue()
         rep = self.vue.afficher_menu_ini()
         rep2 = self.option_partie()
-        rep3 = self.difficulte_partie()
+        self.rep3 = self.difficulte_partie()
 
         if rep == "1":
             largeur = int(input("Largeur de l'aire de jeu: "))
             hauteur = int(input("hauteur de l'aire de jeu: "))
-            
             #INITIALISE DIMENSION JEU
-            self.modele.creer_partie(largeur,hauteur)
+            self.modele.creer_partie(largeur,hauteur,self.rep3)
             self.partie_en_cours = True
             self.jouer_partie()
 
@@ -162,7 +170,7 @@ class Controlleur():
         return rep
 
     def jouer_partie(self):
-        
+        self.modele.partie.creer_niveau(self.rep3)
         while self.partie_en_cours:
             print('\n')
             print("========================================================")
