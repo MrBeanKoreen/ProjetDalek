@@ -18,6 +18,7 @@ class Partie():
         self.daleks = []
         self.niveau = 0
         self.dalek_par_niveau = 0
+        self.score = 0
         if rep3 is not None:
             self.creer_niveau(rep3)
         self.teleporteur = 0
@@ -30,7 +31,6 @@ class Partie():
 
     def creer_niveau(self, rep):
         self.niveau += 1
-
         if rep == "1":
             self.dalek_par_niveau = 5
         elif rep == "2":
@@ -80,6 +80,16 @@ class Dalek():
     def jouerCoup(self, docteur):
         doc_x = docteur.x
         doc_y = docteur.y
+        """ faire ne liste vide pour les daleks en collision, noter le i de la premiere ligne. on va vérifier le j plus tard.
+               vérifier s'il y a deja un tas de ferraille a lendroit ou ya eu collision.
+               if i in list pull pour retirer de la liste de dalek."""
+
+        """for i in self.daleks:
+            for j in self.daleks:
+                if(i.x == j.x && i.y == j.y)
+                    tableauCollision = [i.x,i.y]
+                    if (i.tableauCollision[i.x,i.y] == i.daleks[j.x,j.y])
+                        self.daleks.remove(i)"""
 
         if self.x < doc_x:
             self.x += 1
@@ -136,16 +146,35 @@ class Controlleur():
         self.modele = Jeu()
         self.vue = Vue()
         rep = self.vue.afficher_menu_ini()
-        rep2 = self.option_partie()
-        self.rep3 = self.difficulte_partie()
 
         if rep == "1":
-            largeur = int(input("Largeur de l'aire de jeu: "))
-            hauteur = int(input("hauteur de l'aire de jeu: "))
-            #INITIALISE DIMENSION JEU
-            self.modele.creer_partie(largeur,hauteur,self.rep3)
-            self.partie_en_cours = True
-            self.jouer_partie()
+            rep2 = self.option_partie()
+            if rep2 == "1":
+                self.rep3 = self.difficulte_partie()
+                largeur = int(input("\n\nLargeur de l'aire de jeu: "))
+                hauteur = int(input("hauteur de l'aire de jeu: "))
+                self.modele.nom_joueur = input("Entrez votre nom de joueur : ")
+                #INITIALISE DIMENSION JEU
+                self.modele.creer_partie(largeur,hauteur,self.rep3)
+                self.partie_en_cours = True
+                self.jouer_partie()
+
+            elif rep2 == "2":
+                self.rep3 = self.difficulte_partie()
+                largeur = int(input("\n\nLargeur de l'aire de jeu: "))
+                hauteur = int(input("hauteur de l'aire de jeu: "))
+                self.modele.nom_joueur = input("Entrez votre nom de joueur : ")
+                #INITIALISE DIMENSION JEU
+                self.modele.creer_partie(largeur,hauteur,self.rep3)
+                self.partie_en_cours = True
+                self.jouer_partie()
+
+        elif rep == "3":
+            print("\n\nLE LEADERBOARD")
+            print("\nvide car pas eu le temps de le faire")
+
+        elif rep == "2":
+            print("\n\nM E R C I  D' A V O I R  J O U E R!")
 
 
     def option_partie(self):
@@ -172,9 +201,8 @@ class Controlleur():
     def jouer_partie(self):
         self.modele.partie.creer_niveau(self.rep3)
         while self.partie_en_cours:
-            print('\n')
             print("========================================================")
-            print("                      Dalek Game                        ")
+            print("                Dalek Game Player: "+self.modele.nom_joueur      )
             print("========================================================")
             rep = self.vue.afficher_aire_jeu(self.modele.partie)
             self.modele.jouer_coup(rep)
